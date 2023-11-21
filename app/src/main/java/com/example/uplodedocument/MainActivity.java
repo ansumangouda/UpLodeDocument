@@ -1,26 +1,16 @@
 package com.example.uplodedocument;
-
-import static androidx.activity.result.contract.ActivityResultContracts.*;
-
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.documentfile.provider.DocumentFile;
-
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.view.View;
 import android.widget.EditText;
@@ -28,12 +18,8 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
-
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -160,7 +146,17 @@ public class MainActivity extends AppCompatActivity {
 
 
     private String getRealPathFromUri(Uri uri){
-       /* String filePath = null;
+
+        String filePath = null;
+        if (Build.VERSION.SDK_INT < 19){
+            filePath = getRealPathFromUriBeforeKitKat(uri);
+        }else {
+            filePath = getRealPathFromUriKitKatAndAbove(uri);
+        }
+        return filePath;
+
+
+            /* String filePath = null;
         try {
             if (DocumentsContract.isDocumentUri(this, uri)) {
                 // Handle document URI (e.g., files from Google Drive)
@@ -181,13 +177,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return filePath;*/
-        String filePath = null;
-        if (Build.VERSION.SDK_INT < 19){
-            filePath = getRealPathFromUriBeforeKitKat(uri);
-        }else {
-            filePath = getRealPathFromUriKitKatAndAbove(uri);
-        }
-        return filePath;
     }
 
     private String getRealPathFromUriBeforeKitKat(Uri uri) {
@@ -230,7 +219,7 @@ public class MainActivity extends AppCompatActivity {
         public void onClick(View v) {
             if (v.getId() == R.id.chooseFile){
                 Intent iGallery = new Intent(Intent.ACTION_GET_CONTENT);
-                iGallery.setType("application/pdf");
+                iGallery.setType("image/jpg");
                 iGallery.putExtra(Intent.EXTRA_LOCAL_ONLY,true);
                 activityResultLauncher.launch(iGallery);
             }
